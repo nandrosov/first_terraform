@@ -33,12 +33,12 @@ resource "yandex_compute_instance" "vm-1" {
   }
 
   metadata = {
-    ssh-keys = "root:${file("~/.ssh/id_rsa.pub")}"
+    ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
   }
 
   connection {
     type        = "ssh"
-    user        = "astra"
+    user        = "ubuntu"
     private_key = file("~/.ssh/id_rsa")
     host        = yandex_compute_instance.vm-1.network_interface.0.nat_ip_address
   }
@@ -49,7 +49,7 @@ resource "yandex_compute_instance" "vm-1" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -u astra -i '${self.network_interface.0.nat_ip_address},' --private-key ~/.ssh/id_rsa provision.yml"
+    command = "ansible-playbook -u ubuntu -i '${self.network_interface.0.nat_ip_address},' --private-key ~/.ssh/id_rsa provision.yml"
   }
 
 }
